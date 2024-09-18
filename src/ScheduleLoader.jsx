@@ -2,6 +2,7 @@ import useConferences from './hooks/useConferences.js';
 import { useMemo, useState } from 'react';
 import Schedule from './Schedule.jsx';
 import { dateSorter } from './utils.js';
+import { langs } from './constants.js';
 
 export default function ScheduleLoader() {
     const {
@@ -13,8 +14,14 @@ export default function ScheduleLoader() {
     const conferences = useMemo(() => Array.isArray(data) ? data.sort(dateSorter('start_date')) : data, [data]);
 
     const [ conferenceId, setConferenceId ] = useState();
+    const [ lang, setLang ] = useState();
 
     return (<>
+        <div>
+            <select onChange={e => setLang(e.target.value)}>
+                {Object.entries(langs).map(([langId, langName]) => <option key={langId} value={langId}>{langName}</option>)}
+            </select>
+        </div>
         {isLoading && <p>Please wait...</p>}
         {error && <p>Error: {error}</p>}
         {conferences && <>
@@ -24,8 +31,6 @@ export default function ScheduleLoader() {
                                                        value={conference.id}>{conference.title}</option>)}
             </select>
         </>}
-        {conferenceId && <div>
-            <Schedule conferenceId={conferenceId} />
-        </div>}
+        {conferenceId && <Schedule conferenceId={conferenceId} lang={lang} />}
     </>);
 }
