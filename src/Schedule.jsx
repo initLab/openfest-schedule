@@ -34,7 +34,7 @@ export default function Schedule({
                             {getSpeakerName(speakers[speakerId])}
                         </a>
                         {speakers[speakerId].organisation && <>
-                            /{speakers[speakerId].organisation}/
+                            /&#8288;{speakers[speakerId].organisation}&#8288;/
                         </>}
                     </Fragment>).filter(item => !!item)})
                 </>}
@@ -52,8 +52,26 @@ export default function Schedule({
             <hr />
         </section>)}
         {speakers && <>
-            <div>speakers:</div>
-            <div>{JSON.stringify(speakers)}</div>
+            <div>
+                {Object.entries(speakers).map(([speakerId, speaker]) => <div key={speakerId}>
+                    <a href={'#'.concat(getSpeakerName(speaker))}>
+                        <img width="100" height="100" src="" alt={getSpeakerName(speaker)} />
+                    </a>
+                </div>)}
+            </div>
+            {Object.entries(speakers).map(([speakerId, speaker]) => <div key={speakerId} id={getSpeakerName(speaker)}>
+                <img width="100" height="100" src="" alt={getSpeakerName(speaker)}/>
+                <h3>{getSpeakerName(speaker)}</h3>
+                <div>
+                    {speaker.twitter && <a href={'https://twitter.com/'.concat(speaker.twitter)}>
+                        twitter
+                    </a>}
+                    {speaker.github && <a href={'https://github.com/'.concat(speaker.github)}>
+                        github
+                    </a>}
+                </div>
+                <p>{speaker.biography}</p>
+            </div>)}
         </>}
     </>);
 }
