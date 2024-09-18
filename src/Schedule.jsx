@@ -25,7 +25,7 @@ export default function Schedule({
                 padding: '4px 0',
             }}>{track.name[lang]}
         </div>)}
-        {events && Object.entries(events).map(([eventId, event]) => <section key={eventId} id={'lecture-'.concat(eventId)}>
+        {events && tracks && Object.entries(events).map(([eventId, event]) => <section key={eventId} id={'lecture-'.concat(eventId)}>
             <p>
                 <strong>{event.title}</strong>
                 {event.participant_user_ids && !isTrackHidden(tracks[event.track_id]) && speakers && <>
