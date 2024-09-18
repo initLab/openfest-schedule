@@ -4,6 +4,7 @@ import useTracks from './useTracks.js';
 import useEventTypes from './useEventTypes.js';
 import useHalls from './useHalls.js';
 import useSlots from './useSlots.js';
+import { calculateProgress } from '../utils.js';
 
 export default function useSchedule(conferenceId) {
     const {
@@ -42,8 +43,15 @@ export default function useSchedule(conferenceId) {
         isValidating: slotsValidating,
     } = useSlots(conferenceId);
 
-    const isLoading = eventsLoading || speakersLoading || tracksLoading || eventTypesLoading || hallsLoading || slotsLoading;
-    const isValidating = eventsValidating || speakersValidating || tracksValidating || eventTypesValidating || hallsValidating || slotsValidating;
+    const {
+        isStarted: isLoading,
+        remainingProgress: loadingProgress,
+    } = calculateProgress(eventsLoading, speakersLoading, tracksLoading, eventTypesLoading, hallsLoading, slotsLoading);
+    
+    const {
+        isStarted: isValidating,
+        remainingProgress: validatingProgress,
+    } = calculateProgress(eventsValidating, speakersValidating, tracksValidating, eventTypesValidating, hallsValidating, slotsValidating);
 
     return {
         events,
@@ -53,6 +61,8 @@ export default function useSchedule(conferenceId) {
         halls,
         slots,
         isLoading,
+        loadingProgress,
         isValidating,
+        validatingProgress,
     };
 }

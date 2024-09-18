@@ -12,10 +12,11 @@ export default function Schedule({
         speakers,
         tracks,
         isLoading,
+        loadingProgress,
     } = useSchedule(conferenceId);
 
     return (<>
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <p>Loading... <progress value={loadingProgress} /></p>}
         <div>schedule goes here</div>
         {tracks && Object.entries(tracks).map(([trackId, track]) => <div key={trackId} style={{
                 width: '100%',
