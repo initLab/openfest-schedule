@@ -11,13 +11,20 @@ export default function Schedule({
         events,
         speakers,
         tracks,
+        halls,
         isLoading,
         loadingProgress,
     } = useSchedule(conferenceId);
 
     return (<>
         {isLoading && <p>Loading... <progress value={loadingProgress} /></p>}
-        <div>schedule goes here</div>
+        {halls && <table border="1">
+            <thead>
+                <tr>
+                    {Object.entries(halls).map(([hallId, hall]) => <th key={hallId}>{hall.name[lang]}</th>)}
+                </tr>
+            </thead>
+        </table>}
         {tracks && Object.entries(tracks).map(([trackId, track]) => <div key={trackId} style={{
                 width: '100%',
                 border: '1px solid black',
