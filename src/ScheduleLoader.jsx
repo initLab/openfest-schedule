@@ -1,13 +1,16 @@
 import useConferences from './hooks/useConferences.js';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Schedule from './Schedule.jsx';
+import { dateSorter } from './utils.js';
 
 export default function ScheduleLoader() {
     const {
-        conferences,
+        data,
         error,
         isLoading,
     } = useConferences();
+
+    const conferences = useMemo(() => Array.isArray(data) ? data.sort(dateSorter('start_date')) : data, [data]);
 
     const [ conferenceId, setConferenceId ] = useState();
 
