@@ -17,7 +17,7 @@ export default function Schedule({
     } = useSchedule(conferenceId);
 
     return (<>
-        {isLoading && <p>Loading... <progress value={loadingProgress} /></p>}
+        {isLoading && <>Loading... <progress value={loadingProgress} /></>}
         {halls && <table border="1">
             <thead>
                 <tr>
