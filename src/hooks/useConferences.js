@@ -1,5 +1,5 @@
 import useCfpRequest from './useCfpRequest.js';
 
 export default function useConferences() {
-    return useCfpRequest();
+    return useCfpRequest('.json');
 }
