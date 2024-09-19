@@ -1,8 +1,8 @@
 import './App.css';
-import ScheduleLoader from './ScheduleLoader.jsx';
+import ScheduleChooser from './ScheduleChooser.jsx';
 
 function App() {
-  return (<ScheduleLoader/>);
+  return (<ScheduleChooser/>);
 }
 
 export default App;

@@ -87,6 +87,6 @@ export default function Schedule({
 }
 
 Schedule.propTypes = {
-    conferenceId: PropTypes.string.isRequired,
+    conferenceId: PropTypes.number.isRequired,
     lang: PropTypes.string.isRequired,
 };

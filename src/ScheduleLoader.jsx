@@ -1,36 +1,31 @@
 import useConferences from './hooks/useConferences.js';
-import { useMemo, useState } from 'react';
 import Schedule from './Schedule.jsx';
-import { dateSorter } from './utils.js';
-import { langs } from './constants.js';
+import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 
-export default function ScheduleLoader() {
+export default function ScheduleLoader({
+    year,
+    lang,
+}) {
     const {
         data,
         error,
         isLoading,
     } = useConferences();
 
-    const conferences = useMemo(() => Array.isArray(data) ? data.sort(dateSorter('start_date')) : data, [data]);
-
-    const [ conferenceId, setConferenceId ] = useState();
-    const [ lang, setLang ] = useState();
+    const conferenceId = useMemo(() => data && data.filter(conference => {
+        const dt = new Date(Date.parse(conference.start_date));
+        return dt.getFullYear() === year;
+    })?.[0]?.id, [data, year]);
 
     return (<>
-        <div>
-            <select onChange={e => setLang(e.target.value)}>
-                {Object.entries(langs).map(([langId, langName]) => <option key={langId} value={langId}>{langName}</option>)}
-            </select>
-        </div>
-        {isLoading && <p>Please wait...</p>}
-        {error && <p>Error: {error}</p>}
-        {conferences && <>
-            <label>Select a conference</label>
-            <select onChange={e => setConferenceId(e.target.value)}>
-                {conferences.map(conference => <option key={conference.id}
-                                                       value={conference.id}>{conference.title}</option>)}
-            </select>
-        </>}
+        {isLoading && <p>Loading conferences...</p>}
+        {error && <p>Error loading conferences: {error}</p>}
         {conferenceId && <Schedule conferenceId={conferenceId} lang={lang} />}
     </>);
 }
+
+ScheduleLoader.propTypes = {
+    year: PropTypes.number,
+    lang: PropTypes.string,
+};
