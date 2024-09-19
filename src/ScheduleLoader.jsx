@@ -21,6 +21,7 @@ export default function ScheduleLoader({
     return (<>
         {isLoading && <p>Loading conferences...</p>}
         {error && <p>Error loading conferences: {error}</p>}
+        {data && !conferenceId && <p>No conference found for year {year}</p>}
         {conferenceId && <Schedule conferenceId={conferenceId} lang={lang} />}
     </>);
 }
