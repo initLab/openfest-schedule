@@ -25,7 +25,9 @@ export default function Schedule({
                 </tr>
             </thead>
         </table>}
-        {tracks && Object.entries(tracks).map(([trackId, track]) => <div key={trackId} style={{
+        {tracks && Object.entries(tracks).filter(([, track]) =>
+            !isTrackHidden(track)
+        ).map(([trackId, track]) => <div key={trackId} style={{
                 width: '100%',
                 border: '1px solid black',
                 textAlign: 'center',
