@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import useSchedule from './hooks/useSchedule.js';
 import { getSpeakerName, isTrackHidden } from './utils.js';
 import { Fragment } from 'react';
+import useScheduleTable from './hooks/useScheduleTable.js';
+import Event from './Event.jsx';
 
 export default function Schedule({
     conferenceId,
@@ -12,18 +14,41 @@ export default function Schedule({
         speakers,
         tracks,
         halls,
+        slots,
         isLoading,
         loadingProgress,
     } = useSchedule(conferenceId);
+
+    const {
+        header,
+        rows,
+    } = useScheduleTable({
+        events,
+        halls,
+        slots,
+        lang,
+    });
 
     return (<>
         {isLoading && <>Loading... <progress value={loadingProgress} /></>}
         {halls && <table border="1">
             <thead>
                 <tr>
-                    {Object.entries(halls).map(([hallId, hall]) => <th key={hallId}>{hall.name[lang]}</th>)}
+                    {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
                 </tr>
             </thead>
+            <tbody>
+                {rows.map(row => <tr key={row.id}>
+                    {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
+                        <Event {...cell.event} />
+                    </td>)}
+                </tr>)}
+            </tbody>
+            <tfoot>
+                <tr>
+                    {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
+                </tr>
+            </tfoot>
         </table>}
         {tracks && Object.entries(tracks).filter(([, track]) =>
             !isTrackHidden(track)
