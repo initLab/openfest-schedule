@@ -4,6 +4,7 @@ import { getSpeakerName, isTrackHidden } from './utils.js';
 import { Fragment } from 'react';
 import useScheduleTable from './hooks/useScheduleTable.js';
 import Event from './Event.jsx';
+import defaultSpeaker from './assets/default-speaker.png';
 
 export default function Schedule({
     conferenceId,
@@ -90,12 +91,12 @@ export default function Schedule({
             <div>
                 {Object.entries(speakers).map(([speakerId, speaker]) => <div key={speakerId}>
                     <a href={'#'.concat(getSpeakerName(speaker))}>
-                        <img width="100" height="100" src="" alt={getSpeakerName(speaker)} />
+                        <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)} />
                     </a>
                 </div>)}
             </div>
             {Object.entries(speakers).map(([speakerId, speaker]) => <div key={speakerId} id={getSpeakerName(speaker)}>
-                <img width="100" height="100" src="" alt={getSpeakerName(speaker)}/>
+                <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)}/>
                 <h3>{getSpeakerName(speaker)}</h3>
                 <div>
                     {speaker.twitter && <a href={'https://twitter.com/'.concat(speaker.twitter)}>
