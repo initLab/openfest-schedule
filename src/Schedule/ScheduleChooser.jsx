@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import ScheduleLoader from './ScheduleLoader.jsx';
+import { langs } from './constants.js';
+import { useMemo, useState } from 'react';
+import { dateSorter } from '../utils.js';
+import useConferences from '../hooks/useConferences.js';
+import { getConferenceYear } from './utils.js';
 
-export default function ScheduleChooser({
-    year = 2023,
-    lang = 'bg',
-}) {
-    /*
+export default function ScheduleChooser() {
     const {
         data,
         error,
@@ -14,28 +15,26 @@ export default function ScheduleChooser({
 
     const conferences = useMemo(() => Array.isArray(data) ? data.sort(dateSorter('start_date')) : data, [data]);
 
-    const [ selectedConferenceId, setSelectedConferenceId ] = useState();
-    const [ selectedLang, setSelectedLang ] = useState(lang);
+    const [ year, setYear ] = useState(2023);
+    const [ lang, setLang ] = useState('bg');
 
     return (<>
-        <div>
-            <select onChange={e => setSelectedLang(e.target.value)}>
-                {Object.entries(langs).map(([langId, langName]) => <option key={langId} value={langId}>{langName}</option>)}
-            </select>
-        </div>
         {isLoading && <p>Please wait...</p>}
         {error && <p>Error: {error}</p>}
         {conferences && <>
-            <label>Select a conference</label>
-            <select onChange={e => setSelectedConferenceId(e.target.value)}>
-                {conferences.map(conference => <option key={conference.id}
-                                                       value={conference.id}>{conference.title}</option>)}
+            <select value={year} onChange={e => setYear(parseInt(e.target.value, 10))}>
+                {conferences.map(conference =>
+                    <option key={conference.id} value={getConferenceYear(conference)}>{conference.title}</option>)}
             </select>
         </>}
-        <ScheduleLoader year={year} lang={selectedLang} />
+        {Object.entries(langs).map(([langId, langName]) =>
+            <label key={langId}>
+                <input type="radio" checked={langId === lang} onChange={e =>
+                    setLang(e.target.value)} name="lang" value={langId} />
+                {langName}
+            </label>)}
+        <ScheduleLoader year={year} lang={lang} />
     </>);
-    */
-    return (<ScheduleLoader year={year} lang={lang} />);
 }
 
 ScheduleChooser.propTypes = {

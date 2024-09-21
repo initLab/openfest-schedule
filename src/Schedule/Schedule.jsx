@@ -33,8 +33,9 @@ export default function Schedule({
     });
 
     return (<>
-        {isLoading && <>Loading... <progress value={loadingProgress} /></>}
+        {isLoading && <progress value={loadingProgress}/>}
         <div className="schedule">
+            <hr />
             {header && rows && <>
                 <table>
                     <thead>
