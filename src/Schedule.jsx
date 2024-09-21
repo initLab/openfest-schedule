@@ -36,9 +36,7 @@ export default function Schedule({
         {isLoading && <>Loading... <progress value={loadingProgress} /></>}
         <div className="schedule">
             {header && <>
-                <table style={{
-                    textAlign: 'center',
-                }}>
+                <table>
                     <thead>
                         <tr>
                             {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
@@ -60,9 +58,7 @@ export default function Schedule({
                 <div className="separator"/>
             </>}
             {tracks && <>
-                <table style={{
-                    textAlign: 'center',
-                }}>
+                <table>
                     <tbody>
                         {Object.entries(tracks).filter(([, track]) =>
                             !isTrackHidden(track)
@@ -93,9 +89,7 @@ export default function Schedule({
                 {event.abstract && <p>
                     {event.abstract}
                 </p>}
-                <p style={{
-                    textAlign: 'right',
-                }}>
+                <p className="feedback">
                     <strong>
                         <a href={event.feedback_url}>Submit feedback</a>
                     </strong>
