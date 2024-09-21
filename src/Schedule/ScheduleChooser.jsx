@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import ScheduleLoader from './ScheduleLoader.jsx';
 import { langs } from './constants.js';
 import { useMemo, useState } from 'react';
@@ -36,8 +35,3 @@ export default function ScheduleChooser() {
         <ScheduleLoader year={year} lang={lang} />
     </>);
 }
-
-ScheduleChooser.propTypes = {
-    year: PropTypes.number,
-    lang: PropTypes.string,
-};

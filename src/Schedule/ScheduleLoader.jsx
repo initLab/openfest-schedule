@@ -27,6 +27,6 @@ export default function ScheduleLoader({
 }
 
 ScheduleLoader.propTypes = {
-    year: PropTypes.number,
-    lang: PropTypes.string,
+    year: PropTypes.number.isRequired,
+    lang: PropTypes.string.isRequired,
 };
