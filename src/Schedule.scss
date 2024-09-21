@@ -1,0 +1,93 @@
+.schedule {
+  table {
+    width: 100%;
+    font-size: 0.8em;
+    margin: 0 0 3em 0;
+    clear: both;
+
+    th, td {
+      border-bottom: 1px solid #000;
+      border-right: 1px dotted #999;
+      padding: 0.6em 0.4em;
+      text-align: center;
+      vertical-align: middle;
+      box-shadow: 0 1px 2px #999;
+
+      a {
+        border-bottom: dotted 1px #999;
+        color: #000;
+        font-weight: bold;
+
+        &:hover {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  .schedule-open-biz {
+    background: #75d3b3;
+  }
+
+  .schedule-open-art {
+    background: #F0A388;
+  }
+
+  .schedule-technical {
+    background: #e9d765;
+  }
+
+  .schedule-civic {
+    background: #DAEBBB;
+  }
+
+  .schedule-social {
+    background: #a6b4de;
+  }
+
+  .schedule-advanced-technical {
+    background: #DF9959;
+  }
+
+  .schedule-misc {
+    background: #fff;
+  }
+
+  .schedule-workshop {
+    background: #E2E0E9;
+  }
+
+  .schedule-education {
+    background: #ffaa36;
+  }
+
+  .schedule-en::after, .schedule-bg::after {
+    content: " ";
+    width: 16px;
+    height: 11px;
+    display: block;
+    margin: 0.3em auto 0.3em auto;
+  }
+
+  .schedule-en::after {
+    background: url('./assets/en_US.png');
+  }
+
+  .schedule-bg::after {
+    background: url('./assets/bg_BG.png');
+  }
+
+  .schedule-avatar {
+    float: left;
+    padding: 0.3em;
+    background: #FFF;
+    box-shadow: 0 0 1px 1px #999;
+    margin: 0 1em 2em 0;
+  }
+
+  .separator {
+    margin: 2.4em 0;
+    height: 1px;
+    background: #DBDBDB;
+  }
+}
