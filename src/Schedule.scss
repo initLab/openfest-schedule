@@ -195,4 +195,39 @@
       }
     }
   }
+
+  .speaker {
+    position: relative;
+    margin: 0 0 2em 0;
+
+    &::after {
+      content: " ";
+      clear: both;
+      display: block;
+    }
+
+    > img {
+      float: left;
+      padding: 0.3em;
+      background: #FFF;
+      box-shadow: 0 0 1px 1px #999;
+      margin: 0 1em 2em 0;
+    }
+
+    .icons {
+      text-align: center;
+      display: inline-block;
+      margin: 0 0 0 0.1em;
+
+      a {
+        display: inline-block;
+        margin: 0 0.3em 0 0;
+      }
+    }
+
+    h3 {
+      margin: 0 0 0.4em 0;
+      padding: 0;
+    }
+  }
 }
