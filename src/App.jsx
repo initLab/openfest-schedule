@@ -1,4 +1,4 @@
-import ScheduleChooser from './ScheduleChooser.jsx';
+import ScheduleChooser from './Schedule/ScheduleChooser.jsx';
 
 function App() {
   return (<ScheduleChooser/>);

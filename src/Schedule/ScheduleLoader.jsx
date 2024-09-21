@@ -1,4 +1,4 @@
-import useConferences from './hooks/useConferences.js';
+import useConferences from '../hooks/useConferences.js';
 import Schedule from './Schedule.jsx';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';

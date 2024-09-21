@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import useSchedule from './hooks/useSchedule.js';
+import useSchedule from '../hooks/useSchedule.js';
 import { getSpeakerName, isTrackHidden } from './utils.js';
 import { Fragment } from 'react';
-import useScheduleTable from './hooks/useScheduleTable.js';
+import useScheduleTable from '../hooks/useScheduleTable.js';
 import Event from './Event.jsx';
-import defaultSpeaker from './assets/default-speaker.png';
+import defaultSpeaker from '../assets/default-speaker.png';
 import './Schedule.scss';
 import { langs } from './constants.js';
 
