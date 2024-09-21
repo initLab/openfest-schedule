@@ -35,42 +35,47 @@ export default function Schedule({
     return (<>
         {isLoading && <>Loading... <progress value={loadingProgress} /></>}
         <div className="schedule">
-            {halls && <table style={{
-                textAlign: 'center',
-            }}>
-                <thead>
-                    <tr>
-                        {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows.map(row => <tr key={row.id}>
-                        {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
-                            <Event {...cell.event} />
-                        </td>)}
-                    </tr>)}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
-                    </tr>
-                </tfoot>
-            </table>}
-            <div className="separator"/>
-            {tracks && <table style={{
-                textAlign: 'center',
-            }}>
-                <tbody>
-                    {Object.entries(tracks).filter(([, track]) =>
-                        !isTrackHidden(track)
-                    ).map(([trackId, track]) => <tr key={trackId}>
-                        <td className={track.css_class}>{track.name[lang]}</td>
-                    </tr>)}
-                    {Object.entries(langs).map(([code, name]) => <tr key={code}>
-                        <td className={'schedule-'.concat(code)}>{name}</td>
-                    </tr>)}
-                </tbody>
-            </table>}
+            {header && <>
+                <table style={{
+                    textAlign: 'center',
+                }}>
+                    <thead>
+                        <tr>
+                            {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.map(row => <tr key={row.id}>
+                            {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
+                                <Event {...cell.event} />
+                            </td>)}
+                        </tr>)}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
+                        </tr>
+                    </tfoot>
+                </table>
+                <div className="separator"/>
+            </>}
+            {tracks && <>
+                <table style={{
+                    textAlign: 'center',
+                }}>
+                    <tbody>
+                        {Object.entries(tracks).filter(([, track]) =>
+                            !isTrackHidden(track)
+                        ).map(([trackId, track]) => <tr key={trackId}>
+                            <td className={track.css_class}>{track.name[lang]}</td>
+                        </tr>)}
+                        {Object.entries(langs).map(([code, name]) => <tr key={code}>
+                            <td className={'schedule-'.concat(code)}>{name}</td>
+                        </tr>)}
+                    </tbody>
+                </table>
+                <div className="separator" />
+            </>}
             {events && tracks && Object.entries(events).map(([eventId, event]) => <section key={eventId} id={'lecture-'.concat(eventId)}>
                 <p>
                     <strong>{event.title}</strong>
@@ -95,7 +100,7 @@ export default function Schedule({
                         <a href={event.feedback_url}>Submit feedback</a>
                     </strong>
                 </p>
-                <hr />
+                <div className="separator" />
             </section>)}
             {speakers && <>
                 <div>
