@@ -110,10 +110,10 @@ export default function Schedule({
                         <h3>{getSpeakerName(speaker)}</h3>
                         <div className="icons">
                             {speaker.twitter && <a href={'https://twitter.com/'.concat(speaker.twitter)}>
-                                <i className="fa fa-twitter" />
+                                <i className="fa-brands fa-twitter" />
                             </a>}
                             {speaker.github && <a href={'https://github.com/'.concat(speaker.github)}>
-                                <i className="fa fa-github"/>
+                                <i className="fa-brands fa-github"/>
                             </a>}
                         </div>
                         <p>{speaker.biography}</p>
