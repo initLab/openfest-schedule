@@ -90,9 +90,109 @@
     text-align: right;
   }
 
+  .grid {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .grid::after {
+    content: " ";
+    clear: both;
+    display: block;
+  }
+
+  .grid .col2 {
+    width: 50%;
+    float: left;
+    box-sizing: border-box;
+  }
+
+  .grid .col2 + .col2, .grid .col3 + .col3, .grid .col4 + .col4 {
+    padding: 0 0 0 1em;
+  }
+
+  .grid .col3 {
+    float: left;
+    box-sizing: border-box;
+  }
+
+  .grid .col3:nth-child(3n + 1) {
+    clear: both;
+    padding: 0;
+  }
+
+  .grid .col4 {
+    width: 25%;
+    float: left;
+    box-sizing: border-box;
+  }
+
+  .grid .col4:nth-child(4n + 1) {
+    clear: both;
+    padding: 0;
+  }
+
+  .grid .col-left {
+    width: 70%;
+    float: left;
+    box-sizing: border-box;
+    padding: 0 1.6em 0 0;
+  }
+
+  .grid .col-right {
+    width: 30%;
+    float: left;
+    margin-bottom: 2em;
+    box-sizing: border-box;
+  }
+
+  .grid .col-right .content {
+    width: 100%;
+  }
+
+  @media all and (max-width: 600px) {
+    .grid .col2, .grid .col3, .grid .col4, .grid .col-left, .grid .col-right {
+      width: 100%;
+      float: none;
+      padding: 0 0 1em 0;
+    }
+    .grid .col2 + .col2, .grid .col3 + .col3, .grid .col4 + .col4 {
+      padding: 0;
+    }
+  }
+
   .separator {
     margin: 2.4em 0;
     height: 1px;
     background: #DBDBDB;
+  }
+
+  .members {
+    margin: 0 0 2em 0;
+
+    .member {
+      margin: 0 0 1em 0;
+
+      a {
+        display: block;
+
+        > img {
+          width: 100px;
+          max-width: 100%;
+          padding: 0.3em;
+          background: #FFF;
+          box-shadow: 0 0 1px 1px #999;
+        }
+      }
+
+      span {
+        display: block;
+      }
+
+      .icons a {
+        display: inline-block;
+        margin: 0 0.3em 0 0;
+      }
+    }
   }
 }

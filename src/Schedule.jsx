@@ -97,8 +97,8 @@ export default function Schedule({
                 <div className="separator" />
             </section>)}
             {speakers && <>
-                <div>
-                    {Object.entries(speakers).map(([speakerId, speaker]) => <div key={speakerId}>
+                <div className="grid members">
+                    {Object.entries(speakers).map(([speakerId, speaker]) => <div key={speakerId} className="col4 member">
                         <a href={'#'.concat(getSpeakerName(speaker))}>
                             <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)} />
                         </a>
