@@ -1,4 +1,5 @@
 export default function useScheduleTable({
+    events = {},
     halls = {},
     lang,
 }) {
@@ -8,7 +9,16 @@ export default function useScheduleTable({
         name: hall.name[lang],
     }));
 
-    const rows = [];
+    const rows = Object.entries(events).map(([eventId, event]) => ({
+        id: eventId,
+        cells: [{
+            id: 1,
+            attributes: {
+                colSpan: 2,
+            },
+            event,
+        }],
+    }));
 
     return {
         header,
