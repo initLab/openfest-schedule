@@ -1,4 +1,3 @@
-import './App.css';
 import ScheduleChooser from './ScheduleChooser.jsx';
 
 function App() {
