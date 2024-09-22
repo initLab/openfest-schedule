@@ -14,7 +14,7 @@ export default function useScheduleTable({
         cells: [{
             id: 1,
             attributes: {
-                className: 'schedule-'.concat(event.language).concat(' ').concat(event.track.css_class),
+                className: 'schedule-'.concat(event.language).concat(' ').concat(event.track?.css_class),
                 colSpan: 2,
             },
             event,
