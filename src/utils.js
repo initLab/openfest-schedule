@@ -41,3 +41,15 @@ export function calculateProgress(...elements) {
         isNotStarted: completeCount === 0,
     };
 }
+
+export const addIdAndRelations = (items, relations = []) =>
+    Object.fromEntries(Object.entries(items).map(([id, item]) =>
+        ([id, {
+            id,
+            ...item,
+            ...Object.fromEntries(relations.map(([field, collection, idField]) => ([
+                field,
+                Array.isArray(item[idField]) ? item[idField].map(id => collection[id]) : collection[item[idField]],
+            ]))),
+        }])
+    ));
