@@ -62,18 +62,18 @@ export default function Schedule({
             <div className="separator"/>
             <table>
                 <tbody>
-                    {Object.entries(tracks).filter(([, track]) =>
+                    {Object.values(tracks).filter(track =>
                         !isTrackHidden(track)
-                    ).map(([trackId, track]) => <tr key={trackId}>
+                    ).map(track => <tr key={track.id}>
                         <td className={track.css_class}>{track.name[lang]}</td>
                     </tr>)}
-                    {Object.entries(langs).map(([code, name]) => <tr key={code}>
-                        <td className={'schedule-'.concat(code)}>{name}</td>
+                    {Object.entries(langs).map(([langId, langName]) => <tr key={langId}>
+                        <td className={'schedule-'.concat(langId)}>{langName}</td>
                     </tr>)}
                 </tbody>
             </table>
             <div className="separator" />
-            {Object.entries(events).map(([eventId, event]) => <section key={eventId} id={'lecture-'.concat(eventId)}>
+            {Object.values(events).map(event => <section key={event.id} id={'event-'.concat(event.id)}>
                 <p>
                     <strong>{event.title}</strong>
                     {event.participant_users && !isTrackHidden(event.track) && <>
@@ -92,14 +92,14 @@ export default function Schedule({
             </section>)}
             {<>
                 <div className="grid members">
-                    {Object.entries(speakers).map(([speakerId, speaker]) => <div key={speakerId} className="col4 wmember">
-                        <a href={'#'.concat(getSpeakerName(speaker))}>
+                    {Object.values(speakers).map(speaker => <div key={speaker.id} className="col4 wmember">
+                        <a href={'#'.concat(speaker.id)}>
                             <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)} />
                         </a>
                     </div>)}
                 </div>
-                {Object.entries(speakers).map(([speakerId, speaker]) => <Fragment key={speakerId}>
-                    <div className="speaker" id={getSpeakerName(speaker)}>
+                {Object.values(speakers).map(speaker => <Fragment key={speaker.id}>
+                    <div className="speaker" id={'speaker-'.concat(speaker.id)}>
                         <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)}/>
                         <h3>{getSpeakerName(speaker)}</h3>
                         <div className="icons">

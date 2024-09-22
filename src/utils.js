@@ -45,7 +45,7 @@ export function calculateProgress(...elements) {
 export const addIdAndRelations = (items, relations = []) =>
     Object.fromEntries(Object.entries(items).map(([id, item]) =>
         ([id, {
-            id,
+            id: parseInt(id, 10),
             ...item,
             ...Object.fromEntries(relations.map(([field, collection, idField]) => ([
                 field,
