@@ -7,6 +7,8 @@ import Event from './Event.jsx';
 import defaultSpeaker from '../assets/default-speaker.png';
 import './Schedule.scss';
 import { langs } from './constants.js';
+import Speaker from './Speaker.jsx';
+import FeedbackLink from './FeedbackLink.jsx';
 
 export default function Schedule({
     conferenceId,
@@ -20,6 +22,7 @@ export default function Schedule({
         slots,
         isLoading,
         loadingProgress,
+        isComplete,
     } = useSchedule(conferenceId);
 
     const {
@@ -27,6 +30,7 @@ export default function Schedule({
         rows,
     } = useScheduleTable({
         events,
+        tracks,
         halls,
         slots,
         lang,
@@ -34,57 +38,46 @@ export default function Schedule({
 
     return (<>
         {isLoading && <progress value={loadingProgress}/>}
-        <div className="schedule">
+        {isComplete && <div className="schedule">
             <hr />
-            {header && rows && <>
-                <table>
-                    <thead>
-                        <tr>
-                            {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows.map(row => <tr key={row.id}>
-                            {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
-                                <Event {...cell.event} />
-                            </td>)}
-                        </tr>)}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
-                        </tr>
-                    </tfoot>
-                </table>
-                <div className="separator"/>
-            </>}
-            {tracks && <>
-                <table>
-                    <tbody>
-                        {Object.entries(tracks).filter(([, track]) =>
-                            !isTrackHidden(track)
-                        ).map(([trackId, track]) => <tr key={trackId}>
-                            <td className={track.css_class}>{track.name[lang]}</td>
-                        </tr>)}
-                        {Object.entries(langs).map(([code, name]) => <tr key={code}>
-                            <td className={'schedule-'.concat(code)}>{name}</td>
-                        </tr>)}
-                    </tbody>
-                </table>
-                <div className="separator" />
-            </>}
-            {events && tracks && Object.entries(events).map(([eventId, event]) => <section key={eventId} id={'lecture-'.concat(eventId)}>
+            <table>
+                <thead>
+                    <tr>
+                        {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows.map(row => <tr key={row.id}>
+                        {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
+                            <Event {...cell.event} />
+                        </td>)}
+                    </tr>)}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
+                    </tr>
+                </tfoot>
+            </table>
+            <div className="separator"/>
+            <table>
+                <tbody>
+                    {Object.entries(tracks).filter(([, track]) =>
+                        !isTrackHidden(track)
+                    ).map(([trackId, track]) => <tr key={trackId}>
+                        <td className={track.css_class}>{track.name[lang]}</td>
+                    </tr>)}
+                    {Object.entries(langs).map(([code, name]) => <tr key={code}>
+                        <td className={'schedule-'.concat(code)}>{name}</td>
+                    </tr>)}
+                </tbody>
+            </table>
+            <div className="separator" />
+            {Object.entries(events).map(([eventId, event]) => <section key={eventId} id={'lecture-'.concat(eventId)}>
                 <p>
                     <strong>{event.title}</strong>
-                    {event.participant_user_ids && !isTrackHidden(tracks[event.track_id]) && speakers && <>
-                        ({event.participant_user_ids.map(speakerId => speakers[speakerId] && <Fragment key={speakerId}>
-                            <a key={speakerId} href={'#'.concat(getSpeakerName(speakers[speakerId]))}>
-                                {getSpeakerName(speakers[speakerId])}
-                            </a>
-                            {speakers[speakerId].organisation && <>
-                                /&#8288;{speakers[speakerId].organisation}&#8288;/
-                            </>}
-                        </Fragment>).filter(item => !!item)})
+                    {event.participant_users && !isTrackHidden(event.track) && <>
+                        ({event.participant_users.map(speaker => speaker && <Speaker key={speaker.id} {...speaker} />)})
                     </>}
                 </p>
                 {event.abstract && <p>
@@ -92,12 +85,12 @@ export default function Schedule({
                 </p>}
                 <p className="feedback">
                     <strong>
-                        <a href={event.feedback_url}>Submit feedback</a>
+                        <FeedbackLink {...event} />
                     </strong>
                 </p>
                 <div className="separator" />
             </section>)}
-            {speakers && <>
+            {<>
                 <div className="grid members">
                     {Object.entries(speakers).map(([speakerId, speaker]) => <div key={speakerId} className="col4 wmember">
                         <a href={'#'.concat(getSpeakerName(speaker))}>
@@ -122,7 +115,7 @@ export default function Schedule({
                     <div className="separator" />
                 </Fragment>)}
             </>}
-        </div>
+        </div>}
     </>);
 }
 
