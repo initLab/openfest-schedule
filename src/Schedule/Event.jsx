@@ -1,11 +1,18 @@
-import PropTypes from 'prop-types';
+import { isTrackHidden } from './utils.js';
+import Speaker from './Speaker.jsx';
+import FeedbackLink from './FeedbackLink.jsx';
 
-export default function Event({
-    title,
-}) {
-    return (<strong>{title}</strong>);
+export default function Event(event) {
+    return (<>
+        <a href={'#lecture-'.concat(event.id)}>{event.title}</a>
+        <br />
+        {event.participant_users && !isTrackHidden(event.track) && <>
+            {event.participant_users.map(speaker => speaker && <Speaker key={speaker.id} {...speaker} />)}
+        </>}
+        <p>
+            <i>
+                <FeedbackLink {...event} />
+            </i>
+        </p>
+    </>);
 }
-
-Event.propTypes = {
-    title: PropTypes.string.isRequired,
-};
