@@ -49,11 +49,12 @@ export const normalizeResponse = (items = [], relations = []) =>
             ...item,
             ...Object.fromEntries(relations.map(([field, collection, idField]) => {
                 const key = item[idField];
-                const fn = Array.isArray(key) ? 'filter' : 'find';
 
                 return [
                     field,
-                    collection[fn](item => item.id === key),
+                    Array.isArray(key) ?
+                        collection.filter(item => key.includes(item.id)) :
+                        collection.find(item => item.id === key),
                 ];
             })),
         })
