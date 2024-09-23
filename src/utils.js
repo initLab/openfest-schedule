@@ -1,13 +1,15 @@
-function sorter(a, b, fieldFn) {
-    const fieldA = fieldFn(a);
-    const fieldB = fieldFn(b);
+export const sorter = field => (a, b) => {
+    const fieldA = a[field];
+    const fieldB = b[field];
 
     return fieldA === fieldB ? 0 : (
         fieldA < fieldB ? -1 : 1
     );
-}
+};
 
-export const dateSorter = key => (a, b) => sorter(a, b, item => Date.parse(item[key]));
+export const parseDateFields = (item, dateFields) => Object.fromEntries(Object.entries(item).map(([key, value]) =>
+    [key, dateFields.includes(key) ? new Date(value) : value]
+));
 
 export function calculateProgress(...elements) {
     const totalCount = elements.length;

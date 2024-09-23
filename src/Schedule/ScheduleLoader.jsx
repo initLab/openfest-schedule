@@ -13,10 +13,8 @@ export default function ScheduleLoader({
         isLoading,
     } = useConferences();
 
-    const conferenceId = useMemo(() => data && data.filter(conference => {
-        const dt = new Date(Date.parse(conference.start_date));
-        return dt.getFullYear() === year;
-    })?.[0]?.id, [data, year]);
+    const conferenceId = useMemo(() => data && data.filter(conference =>
+        conference.start_date.getFullYear() === year)?.[0]?.id, [data, year]);
 
     return (<>
         {isLoading && <p>Loading conferences...</p>}

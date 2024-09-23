@@ -4,7 +4,7 @@ import useTracks from './useTracks.js';
 import useEventTypes from './useEventTypes.js';
 import useHalls from './useHalls.js';
 import useSlots from './useSlots.js';
-import { calculateProgress, normalizeResponse } from '../utils.js';
+import { calculateProgress, normalizeResponse, parseDateFields } from '../utils.js';
 import { useMemo } from 'react';
 
 export default function useSchedule(conferenceId) {
@@ -61,7 +61,12 @@ export default function useSchedule(conferenceId) {
     const slots = useMemo(() => normalizeResponse(slotsResponse, [
         ['hall', halls, 'hall_id'],
         ['event', events, 'event_id'],
-    ]), [slotsResponse, halls, events]);
+    ]).map(slot =>
+        parseDateFields(slot, [
+            'starts_at',
+            'ends_at',
+        ])
+    ), [slotsResponse, halls, events]);
 
     const {
         isStarted: isLoading,

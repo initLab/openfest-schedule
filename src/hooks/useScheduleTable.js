@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { sorter } from '../utils.js';
 
 export default function useScheduleTable({
     eventTypeId,
@@ -9,10 +10,18 @@ export default function useScheduleTable({
     return useMemo(() => {
         const filteredEvents = events.filter(event => eventTypeId > 0 ? event.event_type_id === eventTypeId : true);
         const filteredEventIds = filteredEvents.map(event => event.id);
-        const filteredSlots = slots.filter(slot => filteredEventIds.includes(slot.event_id));
+        const filteredSlots = slots.sort(sorter('starts_at')).filter(slot => filteredEventIds.includes(slot.event_id));
+        const days = Array.from(new Set(filteredSlots.map(slot =>
+            slot.starts_at.setHours(0, 0, 0, 0)
+        ))).map(ts => new Date(ts));
         const filteredHallIds = new Set(filteredSlots.map(slot => slot.hall_id));
-        const header = halls.filter(hall => filteredHallIds.has(hall.id));
+        const filteredHalls = halls.filter(hall => filteredHallIds.has(hall.id));
+        const hallSlots = Object.fromEntries(filteredHalls.map(hall => [
+            hall.id,
+            filteredSlots.filter(slot => slot.hall_id === hall.id),
+        ]));
 
+        const header = filteredHalls;
         const rows = filteredEvents.map(event => ({
             id: event.id,
             cells: [{

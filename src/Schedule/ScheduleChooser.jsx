@@ -1,9 +1,8 @@
 import ScheduleLoader from './ScheduleLoader.jsx';
 import { langs } from './constants.js';
 import { useMemo, useState } from 'react';
-import { dateSorter } from '../utils.js';
+import { sorter } from '../utils.js';
 import useConferences from '../hooks/useConferences.js';
-import { getConferenceYear } from './utils.js';
 
 export default function ScheduleChooser() {
     const {
@@ -12,7 +11,7 @@ export default function ScheduleChooser() {
         isLoading,
     } = useConferences();
 
-    const conferences = useMemo(() => Array.isArray(data) ? data.sort(dateSorter('start_date')) : data, [data]);
+    const conferences = useMemo(() => Array.isArray(data) ? data.sort(sorter('start_date')) : data, [data]);
 
     const [ year, setYear ] = useState(2023);
     const [ lang, setLang ] = useState('bg');
@@ -29,7 +28,7 @@ export default function ScheduleChooser() {
         {conferences && <>
             <select value={year} onChange={e => setYear(parseInt(e.target.value, 10))}>
                 {conferences.map(conference =>
-                    <option key={conference.id} value={getConferenceYear(conference)}>{conference.title}</option>)}
+                    <option key={conference.id} value={conference.start_date.getFullYear()}>{conference.title}</option>)}
             </select>
         </>}
         <ScheduleLoader year={year} lang={lang} />
