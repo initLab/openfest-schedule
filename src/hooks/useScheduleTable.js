@@ -21,6 +21,9 @@ export default function useScheduleTable({
             filteredSlots.filter(slot => slot.hall_id === hall.id),
         ]));
 
+        void(days);
+        void(hallSlots);
+
         const header = filteredHalls;
         const rows = filteredEvents.map(event => ({
             id: event.id,
