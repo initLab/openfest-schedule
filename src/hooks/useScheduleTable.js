@@ -1,12 +1,8 @@
 export default function useScheduleTable({
     events = {},
     halls = {},
-    lang,
 }) {
-    const header = Object.values(halls).map(hall => ({
-        id: hall.id,
-        name: hall.name[lang],
-    }));
+    const header = Object.values(halls);
 
     const rows = Object.values(events).map(event => ({
         id: event.id,

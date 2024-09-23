@@ -78,11 +78,11 @@ export default function useSchedule(conferenceId) {
     } = calculateProgress(events, speakers, tracks, eventTypes, halls, slots);
 
     return {
-        events,
         speakers,
         tracks,
         eventTypes,
         halls,
+        events,
         slots,
         isLoading,
         loadingProgress,

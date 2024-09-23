@@ -15,10 +15,10 @@ export default function Schedule({
     lang,
 }) {
     const {
-        events,
         speakers,
         tracks,
         halls,
+        events,
         slots,
         isLoading,
         loadingProgress,
@@ -29,11 +29,10 @@ export default function Schedule({
         header,
         rows,
     } = useScheduleTable({
-        events,
         tracks,
         halls,
+        events,
         slots,
-        lang,
     });
 
     return (<>
@@ -43,7 +42,7 @@ export default function Schedule({
             <table>
                 <thead>
                     <tr>
-                        {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
+                        {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
                     </tr>
                 </thead>
                 <tbody>
@@ -55,7 +54,7 @@ export default function Schedule({
                 </tbody>
                 <tfoot>
                     <tr>
-                        {header.map(hall => <th key={hall.id}>{hall.name}</th>)}
+                        {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
                     </tr>
                 </tfoot>
             </table>
