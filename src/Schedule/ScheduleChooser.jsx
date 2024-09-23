@@ -18,6 +18,12 @@ export default function ScheduleChooser() {
     const [ lang, setLang ] = useState('bg');
 
     return (<>
+        {Object.entries(langs).map(([langId, langName]) =>
+            <label key={langId}>
+                <input type="radio" checked={langId === lang} onChange={e =>
+                    setLang(e.target.value)} name="lang" value={langId} />
+                {langName}
+            </label>)}
         {isLoading && <p>Please wait...</p>}
         {error && <p>Error: {error}</p>}
         {conferences && <>
@@ -26,12 +32,6 @@ export default function ScheduleChooser() {
                     <option key={conference.id} value={getConferenceYear(conference)}>{conference.title}</option>)}
             </select>
         </>}
-        {Object.entries(langs).map(([langId, langName]) =>
-            <label key={langId}>
-                <input type="radio" checked={langId === lang} onChange={e =>
-                    setLang(e.target.value)} name="lang" value={langId} />
-                {langName}
-            </label>)}
         <ScheduleLoader year={year} lang={lang} />
     </>);
 }
