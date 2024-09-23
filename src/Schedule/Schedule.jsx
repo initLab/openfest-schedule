@@ -48,11 +48,11 @@ export default function Schedule({
         {isComplete && <div className="schedule">
             <hr/>
             <table>
-                <thead>
-                <tr>
-                    {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
-                </tr>
-                </thead>
+                {header.length > 0 && <thead>
+                    <tr>
+                        {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
+                    </tr>
+                </thead>}
                 <tbody>
                     {rows.map(row => <tr key={row.id}>
                         {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
@@ -60,11 +60,11 @@ export default function Schedule({
                         </td>)}
                     </tr>)}
                 </tbody>
-                <tfoot>
+                {header.length > 0 && <tfoot>
                     <tr>
                         {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
                     </tr>
-                </tfoot>
+                </tfoot>}
             </table>
             <div className="separator"/>
             <table>
