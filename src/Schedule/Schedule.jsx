@@ -4,7 +4,6 @@ import { getSpeakerName, isTrackHidden } from './utils.js';
 import { Fragment, useState } from 'react';
 import useScheduleTable from '../hooks/useScheduleTable.js';
 import Event from './Event.jsx';
-import defaultSpeaker from '../assets/default-speaker.png';
 import './Schedule.scss';
 import { langs } from './constants.js';
 import Speaker from './Speaker.jsx';
@@ -99,13 +98,13 @@ export default function Schedule({
                 <div className="grid members">
                     {speakers.map(speaker => <div key={speaker.id} className="col4 wmember">
                         <a href={'#'.concat(speaker.id)}>
-                            <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)} />
+                            <img width="100" height="100" src={speaker.picture} alt={getSpeakerName(speaker)} />
                         </a>
                     </div>)}
                 </div>
                 {speakers.map(speaker => <Fragment key={speaker.id}>
                     <div className="speaker" id={'speaker-'.concat(speaker.id)}>
-                        <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)}/>
+                        <img width="100" height="100" src={speaker.picture} alt={getSpeakerName(speaker)}/>
                         <h3>{getSpeakerName(speaker)}</h3>
                         <div className="icons">
                             {speaker.twitter && <a href={'https://twitter.com/'.concat(speaker.twitter)}>
