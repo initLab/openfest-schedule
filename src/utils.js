@@ -42,14 +42,19 @@ export function calculateProgress(...elements) {
     };
 }
 
-export const addIdAndRelations = (items, relations = []) =>
-    Object.fromEntries(Object.entries(items).map(([id, item]) =>
-        ([id, {
+export const normalizeResponse = (items = [], relations = []) =>
+    Object.entries(items).map(([id, item]) =>
+        ({
             id: parseInt(id, 10),
             ...item,
-            ...Object.fromEntries(relations.map(([field, collection, idField]) => ([
-                field,
-                Array.isArray(item[idField]) ? item[idField].map(id => collection[id]) : collection[item[idField]],
-            ]))),
-        }])
-    ));
+            ...Object.fromEntries(relations.map(([field, collection, idField]) => {
+                const key = item[idField];
+                const fn = Array.isArray(key) ? 'filter' : 'find';
+
+                return [
+                    field,
+                    collection[fn](item => item.id === key),
+                ];
+            })),
+        })
+    );

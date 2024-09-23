@@ -4,7 +4,7 @@ import useTracks from './useTracks.js';
 import useEventTypes from './useEventTypes.js';
 import useHalls from './useHalls.js';
 import useSlots from './useSlots.js';
-import { addIdAndRelations, calculateProgress } from '../utils.js';
+import { calculateProgress, normalizeResponse } from '../utils.js';
 import { useMemo } from 'react';
 
 export default function useSchedule(conferenceId) {
@@ -14,7 +14,7 @@ export default function useSchedule(conferenceId) {
         isValidating: speakersValidating,
     } = useSpeakers(conferenceId);
 
-    const speakers = useMemo(() => addIdAndRelations(speakersResponse || []), [speakersResponse]);
+    const speakers = useMemo(() => normalizeResponse(speakersResponse), [speakersResponse]);
 
     const {
         data: tracksResponse,
@@ -22,7 +22,7 @@ export default function useSchedule(conferenceId) {
         isValidating: tracksValidating,
     } = useTracks(conferenceId);
 
-    const tracks = useMemo(() => addIdAndRelations(tracksResponse || []), [tracksResponse]);
+    const tracks = useMemo(() => normalizeResponse(tracksResponse), [tracksResponse]);
 
     const {
         data: eventTypesResponse,
@@ -30,7 +30,7 @@ export default function useSchedule(conferenceId) {
         isValidating: eventTypesValidating,
     } = useEventTypes(conferenceId);
 
-    const eventTypes = useMemo(() => addIdAndRelations(eventTypesResponse || []), [eventTypesResponse]);
+    const eventTypes = useMemo(() => normalizeResponse(eventTypesResponse), [eventTypesResponse]);
 
     const {
         data: hallsResponse,
@@ -38,7 +38,7 @@ export default function useSchedule(conferenceId) {
         isValidating: hallsValidating,
     } = useHalls(conferenceId);
 
-    const halls = useMemo(() => addIdAndRelations(hallsResponse || []), [hallsResponse]);
+    const halls = useMemo(() => normalizeResponse(hallsResponse), [hallsResponse]);
 
     const {
         data: eventsResponse,
@@ -46,7 +46,7 @@ export default function useSchedule(conferenceId) {
         isValidating: eventsValidating,
     } = useEvents(conferenceId);
 
-    const events = useMemo(() => addIdAndRelations(eventsResponse || [], [
+    const events = useMemo(() => normalizeResponse(eventsResponse, [
         ['event_type', eventTypes, 'event_type_id'],
         ['track', tracks, 'track_id'],
         ['participant_users', speakers, 'participant_user_ids'],
@@ -58,7 +58,7 @@ export default function useSchedule(conferenceId) {
         isValidating: slotsValidating,
     } = useSlots(conferenceId);
 
-    const slots = useMemo(() => addIdAndRelations(slotsResponse || [], [
+    const slots = useMemo(() => normalizeResponse(slotsResponse, [
         ['hall', halls, 'hall_id'],
         ['event', events, 'event_id'],
     ]), [slotsResponse, halls, events]);

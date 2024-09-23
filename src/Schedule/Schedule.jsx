@@ -41,7 +41,7 @@ export default function Schedule({
     return (<>
         {isComplete && <select value={eventTypeId} onChange={e => setEventTypeId(parseInt(e.target.value, 10))}>
             <option value={0}>All event types</option>
-            {Object.values(eventTypes).map(eventType =>
+            {eventTypes.map(eventType =>
                 <option key={eventType.id} value={eventType.id}>{eventType.name[lang]}</option>)}
         </select>}
         {isLoading && <progress value={loadingProgress}/>}
@@ -69,9 +69,7 @@ export default function Schedule({
             <div className="separator"/>
             <table>
                 <tbody>
-                    {Object.values(tracks).filter(track =>
-                        !isTrackHidden(track)
-                    ).map(track => <tr key={track.id}>
+                    {tracks.filter(track => !isTrackHidden(track)).map(track => <tr key={track.id}>
                         <td className={track.css_class}>{track.name[lang]}</td>
                     </tr>)}
                     {Object.entries(langs).map(([langId, langName]) => <tr key={langId}>
@@ -80,7 +78,7 @@ export default function Schedule({
                 </tbody>
             </table>
             <div className="separator" />
-            {Object.values(events).map(event => <section key={event.id} id={'event-'.concat(event.id)}>
+            {events.map(event => <section key={event.id} id={'event-'.concat(event.id)}>
                 <p>
                     <strong>{event.title}</strong>
                     {event.participant_users && !isTrackHidden(event.track) && <>
@@ -99,13 +97,13 @@ export default function Schedule({
             </section>)}
             {<>
                 <div className="grid members">
-                    {Object.values(speakers).map(speaker => <div key={speaker.id} className="col4 wmember">
+                    {speakers.map(speaker => <div key={speaker.id} className="col4 wmember">
                         <a href={'#'.concat(speaker.id)}>
                             <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)} />
                         </a>
                     </div>)}
                 </div>
-                {Object.values(speakers).map(speaker => <Fragment key={speaker.id}>
+                {speakers.map(speaker => <Fragment key={speaker.id}>
                     <div className="speaker" id={'speaker-'.concat(speaker.id)}>
                         <img width="100" height="100" src={defaultSpeaker} alt={getSpeakerName(speaker)}/>
                         <h3>{getSpeakerName(speaker)}</h3>
