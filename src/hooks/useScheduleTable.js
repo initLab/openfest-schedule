@@ -1,10 +1,17 @@
-export default function useScheduleTable({
-    events = {},
-    halls = {},
-}) {
-    const header = Object.values(halls);
+import { useMemo } from 'react';
 
-    const rows = Object.values(events).map(event => ({
+export default function useScheduleTable({
+    eventTypeId,
+    halls = {},
+    events = {},
+    slots = {},
+}) {
+    const filteredEvents = useMemo(() => Object.values(events).filter(event => eventTypeId > 0 ? event.event_type_id === eventTypeId : true), [eventTypeId, events]);
+    const filteredEventIds = useMemo(() => new Set(filteredEvents.map(event => event.id)), [filteredEvents]);
+    const filteredHallIds = useMemo(() => new Set(Object.values(slots).filter(slot => filteredEventIds.has(slot.event_id)).map(slot => slot.hall_id)), [filteredEventIds, slots]);
+    const header = useMemo(() => Object.values(halls).filter(hall => filteredHallIds.has(hall.id)), [filteredHallIds, halls]);
+
+    const rows = filteredEvents.map(event => ({
         id: event.id,
         cells: [{
             id: 1,

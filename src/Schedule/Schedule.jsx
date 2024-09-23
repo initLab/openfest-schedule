@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import useSchedule from '../hooks/useSchedule.js';
 import { getSpeakerName, isTrackHidden } from './utils.js';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import useScheduleTable from '../hooks/useScheduleTable.js';
 import Event from './Event.jsx';
 import defaultSpeaker from '../assets/default-speaker.png';
@@ -17,6 +17,7 @@ export default function Schedule({
     const {
         speakers,
         tracks,
+        eventTypes,
         halls,
         events,
         slots,
@@ -25,25 +26,32 @@ export default function Schedule({
         isComplete,
     } = useSchedule(conferenceId);
 
+    const [eventTypeId, setEventTypeId] = useState(0);
+
     const {
         header,
         rows,
     } = useScheduleTable({
-        tracks,
+        eventTypeId,
         halls,
         events,
         slots,
     });
 
     return (<>
+        {isComplete && <select value={eventTypeId} onChange={e => setEventTypeId(parseInt(e.target.value, 10))}>
+            <option value={0}>All event types</option>
+            {Object.values(eventTypes).map(eventType =>
+                <option key={eventType.id} value={eventType.id}>{eventType.name[lang]}</option>)}
+        </select>}
         {isLoading && <progress value={loadingProgress}/>}
         {isComplete && <div className="schedule">
-            <hr />
+            <hr/>
             <table>
                 <thead>
-                    <tr>
-                        {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
-                    </tr>
+                <tr>
+                    {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
+                </tr>
                 </thead>
                 <tbody>
                     {rows.map(row => <tr key={row.id}>
