@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import useSchedule from '../hooks/useSchedule.js';
-import { getSpeakerName, isTrackHidden } from './utils.js';
+import { isTrackHidden } from './utils.js';
 import { Fragment, useState } from 'react';
 import useScheduleTable from '../hooks/useScheduleTable.js';
 import Event from './Event.jsx';
@@ -98,14 +98,14 @@ export default function Schedule({
                 <div className="grid members">
                     {speakers.map(speaker => <div key={speaker.id} className="col4 wmember">
                         <a href={'#'.concat(speaker.id)}>
-                            <img width="100" height="100" src={speaker.picture} alt={getSpeakerName(speaker)} />
+                            <img width="100" height="100" src={speaker.picture} alt={speaker.name} />
                         </a>
                     </div>)}
                 </div>
                 {speakers.map(speaker => <Fragment key={speaker.id}>
                     <div className="speaker" id={'speaker-'.concat(speaker.id)}>
-                        <img width="100" height="100" src={speaker.picture} alt={getSpeakerName(speaker)}/>
-                        <h3>{getSpeakerName(speaker)}</h3>
+                        <img width="100" height="100" src={speaker.picture} alt={speaker.name}/>
+                        <h3>{speaker.name}</h3>
                         <div className="icons">
                             {speaker.twitter && <a href={'https://twitter.com/'.concat(speaker.twitter)}>
                                 <i className="fa-brands fa-twitter" />
