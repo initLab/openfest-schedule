@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { getMidnightTimestamp, isSameDay, sorter } from '../utils.js';
+import { langs } from '../Schedule/constants.js';
 
 export default function useScheduleTable({
     eventTypeId,
@@ -24,7 +25,12 @@ export default function useScheduleTable({
         void(days);
         void(hallSlots);
 
-        const header = filteredHalls;
+        const header = [{
+                id: 0,
+                name: Object.fromEntries(Object.keys(langs).map(lang => [lang, ''])),
+            },
+            ...filteredHalls,
+        ];
         const rows = days.flatMap(day => [{
             id: 'header-'.concat(day.getTime().toString()),
             cells: [{
@@ -39,6 +45,9 @@ export default function useScheduleTable({
                 id: slot.id,
                 cells: [{
                     id: 1,
+                    day, // TODO replace with slot time
+                }, {
+                    id: 2,
                     attributes: {
                         className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
                         colSpan: 2,
