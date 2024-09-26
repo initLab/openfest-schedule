@@ -99,7 +99,7 @@ export default function Schedule({
             {<>
                 <div className="grid members">
                     {speakers.map(speaker => <div key={speaker.id} className="col4 wmember">
-                        <a href={'#'.concat(speaker.id)}>
+                        <a href={'#speaker-'.concat(speaker.id)}>
                             <img width="100" height="100" src={speaker.picture} alt={speaker.name} />
                         </a>
                     </div>)}
