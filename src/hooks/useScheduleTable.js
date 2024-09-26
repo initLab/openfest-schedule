@@ -15,6 +15,10 @@ export default function useScheduleTable({
         const days = Array.from(new Set(filteredSlots.map(slot =>
             getMidnightTimestamp(slot.starts_at)
         ))).map(ts => new Date(ts));
+        const microslots = Array.from(new Set(filteredSlots.flatMap(slot => [
+            slot.starts_at.getTime(),
+            slot.ends_at.getTime(),
+        ]))).map(ts => new Date(ts)).sort();
         const filteredHallIds = new Set(filteredSlots.map(slot => slot.hall_id));
         const filteredHalls = halls.filter(hall => filteredHallIds.has(hall.id));
         const hallSlots = Object.fromEntries(filteredHalls.map(hall => [
@@ -31,31 +35,43 @@ export default function useScheduleTable({
             },
             ...filteredHalls,
         ];
-        const rows = days.flatMap(day => [{
-            id: 'header-'.concat(day.getTime().toString()),
-            cells: [{
-                id: 1,
-                attributes: {
-                    colSpan: header.length,
-                },
-                day,
-            }]
-        },
-            ...filteredSlots.filter(slot => isSameDay(slot.starts_at, day)).map(slot => ({
-                id: slot.id,
-                cells: [{
-                    id: 1,
-                    day, // TODO replace with slot time
-                }, {
-                    id: 2,
-                    attributes: {
-                        className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
-                        colSpan: 2,
-                    },
-                    event: slot.event,
-                }],
-            }))
-        ]);
+
+        const rows = microslots.flatMap((date, index, array) => {
+            const isFirst = index === 0;
+            const isLast = index === array.length - 1;
+            const isFirstForTheDay = index > 0 && !isSameDay(date, array[index - 1]);
+            const isLastForTheDay = array?.[index + 1] && !isSameDay(date, array[index + 1]);
+
+            const showHeader = isFirst || isFirstForTheDay;
+            const showSlot = !isLast && !isLastForTheDay;
+
+            return [
+                ...showHeader ? [{
+                    id: 'header-'.concat(date.getTime().toString()),
+                    cells: [{
+                        id: 1,
+                        attributes: {
+                            colSpan: header.length,
+                        },
+                        day: date,
+                    }]
+                }] : [],
+                ...showSlot ? [{
+                    id: 'slot-'.concat(date.getTime().toString()),
+                    cells: [{
+                        id: 1,
+                        day: date, // TODO replace with slot time
+                    }, {
+                        id: 2,
+                    }],
+                    // attributes: {
+                    //     className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
+                    //     colSpan: 2,
+                    // },
+                    // event: slot.event,
+                }] : [],
+            ];
+        });
 
         return {
             header,
