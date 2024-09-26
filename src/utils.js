@@ -61,3 +61,9 @@ export const normalizeResponse = (items = [], relations = []) =>
             })),
         })
     );
+
+export const getMidnightTimestamp = date => (new Date(date.getTime())).setHours(0, 0, 0, 0);
+
+export function isSameDay(dateA, dateB) {
+    return getMidnightTimestamp(dateA) === getMidnightTimestamp(dateB);
+}

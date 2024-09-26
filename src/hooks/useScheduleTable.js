@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { sorter } from '../utils.js';
+import { getMidnightTimestamp, isSameDay, sorter } from '../utils.js';
 
 export default function useScheduleTable({
     eventTypeId,
@@ -12,7 +12,7 @@ export default function useScheduleTable({
         const filteredEventIds = filteredEvents.map(event => event.id);
         const filteredSlots = slots.sort(sorter('starts_at')).filter(slot => filteredEventIds.includes(slot.event_id));
         const days = Array.from(new Set(filteredSlots.map(slot =>
-            slot.starts_at.setHours(0, 0, 0, 0)
+            getMidnightTimestamp(slot.starts_at)
         ))).map(ts => new Date(ts));
         const filteredHallIds = new Set(filteredSlots.map(slot => slot.hall_id));
         const filteredHalls = halls.filter(hall => filteredHallIds.has(hall.id));
@@ -25,17 +25,28 @@ export default function useScheduleTable({
         void(hallSlots);
 
         const header = filteredHalls;
-        const rows = filteredEvents.map(event => ({
-            id: event.id,
+        const rows = days.flatMap(day => [{
+            id: 'header-'.concat(day.getTime().toString()),
             cells: [{
                 id: 1,
                 attributes: {
-                    className: 'schedule-'.concat(event.language).concat(' ').concat(event.track?.css_class),
-                    colSpan: 2,
+                    colSpan: header.length,
                 },
-                event,
-            }],
-        }));
+                day,
+            }]
+        },
+            ...filteredSlots.filter(slot => isSameDay(slot.starts_at, day)).map(slot => ({
+                id: slot.id,
+                cells: [{
+                    id: 1,
+                    attributes: {
+                        className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
+                        colSpan: 2,
+                    },
+                    event: slot.event,
+                }],
+            }))
+        ]);
 
         return {
             header,

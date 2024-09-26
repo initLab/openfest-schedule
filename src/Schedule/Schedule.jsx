@@ -8,6 +8,7 @@ import './Schedule.scss';
 import { langs } from './constants.js';
 import Speaker from './Speaker.jsx';
 import FeedbackLink from './FeedbackLink.jsx';
+import Day from './Day.jsx';
 
 export default function Schedule({
     conferenceId,
@@ -55,7 +56,8 @@ export default function Schedule({
                 <tbody>
                     {rows.map(row => <tr key={row.id}>
                         {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
-                            <Event {...cell.event} />
+                            {cell.day && <Day date={cell.day} />}
+                            {cell.event && <Event {...cell.event} />}
                         </td>)}
                     </tr>)}
                 </tbody>
