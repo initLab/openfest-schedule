@@ -39,6 +39,7 @@ export default function useScheduleTable({
         const rows = microslots.flatMap((date, index, array) => {
             const isFirst = index === 0;
             const isLast = index === array.length - 1;
+            const nextDate = !isLast ? array[index + 1] : null;
             const isFirstForTheDay = index > 0 && !isSameDay(date, array[index - 1]);
             const isLastForTheDay = array?.[index + 1] && !isSameDay(date, array[index + 1]);
 
@@ -53,22 +54,25 @@ export default function useScheduleTable({
                         attributes: {
                             colSpan: header.length,
                         },
-                        day: date,
-                    }]
+                        dateHeader: date,
+                    }],
                 }] : [],
                 ...showSlot ? [{
                     id: 'slot-'.concat(date.getTime().toString()),
                     cells: [{
                         id: 1,
-                        day: date, // TODO replace with slot time
+                        slotTime: {
+                            start: date,
+                            end: nextDate,
+                        }
                     }, {
                         id: 2,
+                        // attributes: {
+                        //     className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
+                        //     colSpan: 2,
+                        // },
+                        // event: slot.event,
                     }],
-                    // attributes: {
-                    //     className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
-                    //     colSpan: 2,
-                    // },
-                    // event: slot.event,
                 }] : [],
             ];
         });

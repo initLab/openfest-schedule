@@ -3,12 +3,13 @@ import useSchedule from '../hooks/useSchedule.js';
 import { isTrackHidden } from './utils.js';
 import { Fragment, useState } from 'react';
 import useScheduleTable from '../hooks/useScheduleTable.js';
-import Event from './Event.jsx';
+import Event from './Cell/Event.jsx';
 import './Schedule.scss';
 import { langs } from './constants.js';
 import Speaker from './Speaker.jsx';
 import FeedbackLink from './FeedbackLink.jsx';
-import Day from './Day.jsx';
+import DateHeader from './Cell/DateHeader.jsx';
+import SlotTime from './Cell/SlotTime.jsx';
 
 export default function Schedule({
     conferenceId,
@@ -56,7 +57,8 @@ export default function Schedule({
                 <tbody>
                     {rows.map(row => <tr key={row.id}>
                         {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
-                            {cell.day && <Day date={cell.day} />}
+                            {cell.dateHeader && <DateHeader date={cell.dateHeader} />}
+                            {cell.slotTime && <SlotTime {...cell.slotTime} />}
                             {cell.event && <Event {...cell.event} />}
                         </td>)}
                     </tr>)}

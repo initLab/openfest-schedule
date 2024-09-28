@@ -1,6 +1,6 @@
-import { isTrackHidden } from './utils.js';
-import Speaker from './Speaker.jsx';
-import FeedbackLink from './FeedbackLink.jsx';
+import { isTrackHidden } from '../utils.js';
+import Speaker from '../Speaker.jsx';
+import FeedbackLink from '../FeedbackLink.jsx';
 
 export default function Event(event) {
     return (<>
