@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { getMidnightTimestamp, isSameDay, sorter } from '../utils.js';
+import { sorter, toMidnight } from '../utils.js';
 import { langs } from '../Schedule/constants.js';
+import { getTime, isSameDay, toDate } from 'date-fns';
 
 export default function useScheduleTable({
     eventTypeId,
@@ -12,13 +13,11 @@ export default function useScheduleTable({
         const filteredEvents = events.filter(event => eventTypeId > 0 ? event.event_type_id === eventTypeId : true);
         const filteredEventIds = filteredEvents.map(event => event.id);
         const filteredSlots = slots.sort(sorter('starts_at')).filter(slot => filteredEventIds.includes(slot.event_id));
-        const days = Array.from(new Set(filteredSlots.map(slot =>
-            getMidnightTimestamp(slot.starts_at)
-        ))).map(ts => new Date(ts));
+        const days = Array.from(new Set(filteredSlots.map(slot => getTime(toMidnight(slot))))).map(ts => toDate(ts));
         const microslots = Array.from(new Set(filteredSlots.flatMap(slot => [
-            slot.starts_at.getTime(),
-            slot.ends_at.getTime(),
-        ]))).map(ts => new Date(ts)).sort();
+            getTime(slot.starts_at),
+            getTime(slot.ends_at),
+        ]))).sort().map(ts => toDate(ts));
         const filteredHallIds = new Set(filteredSlots.map(slot => slot.hall_id));
         const filteredHalls = halls.filter(hall => filteredHallIds.has(hall.id));
         const hallSlots = Object.fromEntries(filteredHalls.map(hall => [
@@ -48,7 +47,7 @@ export default function useScheduleTable({
 
             return [
                 ...showHeader ? [{
-                    id: 'header-'.concat(date.getTime().toString()),
+                    id: 'header-'.concat(getTime(date).toString()),
                     cells: [{
                         id: 1,
                         attributes: {
@@ -58,7 +57,7 @@ export default function useScheduleTable({
                     }],
                 }] : [],
                 ...showSlot ? [{
-                    id: 'slot-'.concat(date.getTime().toString()),
+                    id: 'slot-'.concat(getTime(date).toString()),
                     cells: [{
                         id: 1,
                         slotTime: {

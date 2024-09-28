@@ -1,12 +1,19 @@
 import PropTypes from 'prop-types';
+import { bg, enGB } from 'date-fns/locale';
+import { format } from 'date-fns';
 
 export default function DateHeader({
     date,
+    lang,
 }) {
-    // TODO: format with date-fns
-    return date.getDate().toString().concat('.').concat((date.getMonth() + 1).toString()).concat(' - ').concat(date.getDay());
+    const locale = lang === 'bg' ? bg : enGB;
+
+    return format(date, 'dd MMMM - EEEE', {
+        locale,
+    });
 }
 
 DateHeader.propTypes = {
     date: PropTypes.object.isRequired,
+    lang: PropTypes.string,
 };

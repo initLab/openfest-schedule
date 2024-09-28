@@ -1,3 +1,5 @@
+import { parseJSON, set } from 'date-fns';
+
 export const sorter = field => (a, b) => {
     const fieldA = a[field];
     const fieldB = b[field];
@@ -8,7 +10,7 @@ export const sorter = field => (a, b) => {
 };
 
 export const parseDateFields = (item, dateFields) => Object.fromEntries(Object.entries(item).map(([key, value]) =>
-    [key, dateFields.includes(key) ? new Date(value) : value]
+    [key, dateFields.includes(key) ? parseJSON(value) : value]
 ));
 
 export function calculateProgress(...elements) {
@@ -62,8 +64,9 @@ export const normalizeResponse = (items = [], relations = []) =>
         })
     );
 
-export const getMidnightTimestamp = date => (new Date(date.getTime())).setHours(0, 0, 0, 0);
-
-export function isSameDay(dateA, dateB) {
-    return getMidnightTimestamp(dateA) === getMidnightTimestamp(dateB);
-}
+export const toMidnight = date => set(date, {
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+});

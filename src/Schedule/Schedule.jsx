@@ -57,7 +57,7 @@ export default function Schedule({
                 <tbody>
                     {rows.map(row => <tr key={row.id}>
                         {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
-                            {cell.dateHeader && <DateHeader date={cell.dateHeader} />}
+                            {cell.dateHeader && <DateHeader date={cell.dateHeader} lang={lang} />}
                             {cell.slotTime && <SlotTime {...cell.slotTime} />}
                             {cell.event && <Event {...cell.event} />}
                         </td>)}
