@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { sorter, toMidnight } from '../utils.js';
 import { langs } from '../Schedule/constants.js';
-import { getTime, isSameDay, toDate } from 'date-fns';
+import { compareAsc, getTime, isSameDay, toDate } from 'date-fns';
 
 export default function useScheduleTable({
     eventTypeId,
@@ -42,8 +42,30 @@ export default function useScheduleTable({
             const isFirstForTheDay = index > 0 && !isSameDay(date, array[index - 1]);
             const isLastForTheDay = array?.[index + 1] && !isSameDay(date, array[index + 1]);
 
+            const eventCells = filteredHalls.map(hall => {
+                const slot = filteredSlots.find(slot =>
+                    slot.hall_id === hall.id &&
+                    compareAsc(slot.starts_at, date) === 0
+                );
+
+                if (!slot) {
+                    return {
+                        id: 'blank-'.concat(hall.id),
+                    };
+                }
+
+                return {
+                    id: 'slot-'.concat(slot.id),
+                    attributes: {
+                        className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
+                    },
+                    event: slot.event,
+                };
+            });
+            const isEmptyRow = !eventCells.find(slot => !!slot.event);
+
             const showHeader = isFirst || isFirstForTheDay;
-            const showSlot = !isLast && !isLastForTheDay;
+            const showSlot = !isLast && !isLastForTheDay && !isEmptyRow;
 
             return [
                 ...showHeader ? [{
@@ -57,21 +79,17 @@ export default function useScheduleTable({
                     }],
                 }] : [],
                 ...showSlot ? [{
-                    id: 'slot-'.concat(getTime(date).toString()),
-                    cells: [{
-                        id: 'timeslot',
-                        timeSlot: {
-                            start: date,
-                            end: nextDate,
-                        }
-                    }, {
-                        id: 2,
-                        // attributes: {
-                        //     className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
-                        //     colSpan: 2,
-                        // },
-                        // event: slot.event,
-                    }],
+                    id: 'row-'.concat(getTime(date).toString()),
+                    cells: [
+                        {
+                            id: 'timeslot',
+                            timeSlot: {
+                                start: date,
+                                end: nextDate,
+                            }
+                        },
+                        ...eventCells,
+                    ],
                 }] : [],
             ];
         });
