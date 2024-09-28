@@ -60,7 +60,7 @@ export default function useScheduleTable({
                     id: 'slot-'.concat(getTime(date).toString()),
                     cells: [{
                         id: 1,
-                        slotTime: {
+                        timeSlot: {
                             start: date,
                             end: nextDate,
                         }

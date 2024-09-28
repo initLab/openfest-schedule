@@ -9,7 +9,7 @@ import { langs } from './constants.js';
 import Speaker from './Speaker.jsx';
 import FeedbackLink from './FeedbackLink.jsx';
 import DateHeader from './Cell/DateHeader.jsx';
-import SlotTime from './Cell/SlotTime.jsx';
+import TimeSlot from './Cell/TimeSlot.jsx';
 
 export default function Schedule({
     conferenceId,
@@ -58,7 +58,7 @@ export default function Schedule({
                     {rows.map(row => <tr key={row.id}>
                         {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
                             {cell.dateHeader && <DateHeader date={cell.dateHeader} lang={lang} />}
-                            {cell.slotTime && <SlotTime {...cell.slotTime} />}
+                            {cell.timeSlot && <TimeSlot {...cell.timeSlot} />}
                             {cell.event && <Event {...cell.event} />}
                         </td>)}
                     </tr>)}

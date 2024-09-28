@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-export default function SlotTime({
+export default function TimeSlot({
     start,
     end,
 }) {
