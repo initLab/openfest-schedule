@@ -49,7 +49,7 @@ export default function useScheduleTable({
                 ...showHeader ? [{
                     id: 'header-'.concat(getTime(date).toString()),
                     cells: [{
-                        id: 1,
+                        id: 'header',
                         attributes: {
                             colSpan: header.length,
                         },
@@ -59,7 +59,7 @@ export default function useScheduleTable({
                 ...showSlot ? [{
                     id: 'slot-'.concat(getTime(date).toString()),
                     cells: [{
-                        id: 1,
+                        id: 'timeslot',
                         timeSlot: {
                             start: date,
                             end: nextDate,
