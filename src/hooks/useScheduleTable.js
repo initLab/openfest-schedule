@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { sorter, toMidnight } from '../utils.js';
+import { sorter } from '../utils.js';
 import { langs } from '../Schedule/constants.js';
 import { compareAsc, getTime, isSameDay, toDate } from 'date-fns';
 
@@ -13,20 +13,13 @@ export default function useScheduleTable({
         const filteredEvents = events.filter(event => eventTypeId > 0 ? event.event_type_id === eventTypeId : true);
         const filteredEventIds = filteredEvents.map(event => event.id);
         const filteredSlots = slots.sort(sorter('starts_at')).filter(slot => filteredEventIds.includes(slot.event_id));
-        const days = Array.from(new Set(filteredSlots.map(slot => getTime(toMidnight(slot))))).map(ts => toDate(ts));
         const microslots = Array.from(new Set(filteredSlots.flatMap(slot => [
             getTime(slot.starts_at),
             getTime(slot.ends_at),
         ]))).sort().map(ts => toDate(ts));
         const filteredHallIds = new Set(filteredSlots.map(slot => slot.hall_id));
         const filteredHalls = halls.filter(hall => filteredHallIds.has(hall.id));
-        const hallSlots = Object.fromEntries(filteredHalls.map(hall => [
-            hall.id,
-            filteredSlots.filter(slot => slot.hall_id === hall.id),
-        ]));
-
-        void(days);
-        void(hallSlots);
+        const skipHallSlots = new Map();
 
         const header = [{
                 id: 0,
