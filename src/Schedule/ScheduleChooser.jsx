@@ -13,7 +13,7 @@ export default function ScheduleChooser() {
 
     const conferences = useMemo(() => Array.isArray(data) ? data.sort(sorter('start_date')) : data, [data]);
 
-    const [ year, setYear ] = useState(2023);
+    const [ year, setYear ] = useState(2024);
     const [ lang, setLang ] = useState('bg');
 
     return (<>
