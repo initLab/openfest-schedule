@@ -35,35 +35,60 @@ export default function useScheduleTable({
             ...filteredHalls,
         ];
 
-        const rows = microslots.flatMap((date, index, array) => {
-            const isFirst = index === 0;
-            const isLast = index === array.length - 1;
-            const nextDate = !isLast ? array[index + 1] : null;
-            const isFirstForTheDay = index > 0 && !isSameDay(date, array[index - 1]);
-            const isLastForTheDay = array?.[index + 1] && !isSameDay(date, array[index + 1]);
+        const rows = microslots.flatMap((date, slotsIndex, slotsArray) => {
+            const isFirst = slotsIndex === 0;
+            const isLast = slotsIndex === slotsArray.length - 1;
+            const nextDate = !isLast ? slotsArray[slotsIndex + 1] : null;
+            const isFirstForTheDay = slotsIndex > 0 && !isSameDay(date, slotsArray[slotsIndex - 1]);
+            const isLastForTheDay = slotsArray?.[slotsIndex + 1] && !isSameDay(date, slotsArray[slotsIndex + 1]);
+            const processedEvents = new Set();
 
-            const eventCells = filteredHalls.map(hall => {
-                const slot = filteredSlots.find(slot =>
-                    slot.hall_id === hall.id &&
-                    compareAsc(slot.starts_at, date) === 0
-                );
+            const eventCells = filteredHalls.flatMap((hall, hallIndex, hallsArray) => {
+                const currentTimeSlots = filteredSlots.filter(slot => compareAsc(slot.starts_at, date) === 0);
+                const currentHallSlot = currentTimeSlots.find(slot => slot.hall_id === hall.id);
 
-                if (!slot) {
-                    return {
+                if (!currentHallSlot) {
+                    return [{
                         id: 'blank-'.concat(hall.id),
-                    };
+                    }];
                 }
 
-                return {
-                    id: 'slot-'.concat(slot.id),
-                    attributes: {
-                        className: 'schedule-'.concat(slot.event.language).concat(' ').concat(slot.event.track?.css_class),
-                    },
-                    event: slot.event,
-                };
-            });
-            const isEmptyRow = !eventCells.find(slot => !!slot.event);
+                if (processedEvents.has(currentHallSlot.event_id)) {
+                    return [];
+                }
 
+                let colSpan = 1;
+
+                for (const index of hallsArray.keys()) {
+                    if (index <= hallIndex) {
+                        continue;
+                    }
+
+                    const currentHall = hallsArray[index];
+                    const currentSlot = currentTimeSlots.find(slot =>
+                        slot.hall_id === currentHall.id &&
+                        slot.event_id === currentHallSlot.event_id
+                    );
+
+                    if (!currentSlot) {
+                        break;
+                    }
+
+                    processedEvents.add(currentHallSlot.event_id);
+                    colSpan++;
+                }
+
+                return [{
+                    id: 'slot-'.concat(currentHallSlot.id),
+                    attributes: {
+                        className: 'schedule-'.concat(currentHallSlot.event.language).concat(' ').concat(currentHallSlot.event.track?.css_class),
+                        colSpan,
+                    },
+                    event: currentHallSlot.event,
+                }];
+            });
+
+            const isEmptyRow = !eventCells.find(slot => !!slot?.event);
             const showHeader = isFirst || isFirstForTheDay;
             const showSlot = !isLast && !isLastForTheDay && !isEmptyRow;
 
