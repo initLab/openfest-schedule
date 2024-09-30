@@ -81,7 +81,7 @@ export default function useScheduleTable({
                 }];
             });
 
-            const isEmptyRow = !eventCells.find(slot => !!slot?.event);
+            const isEmptyRow = false; // TODO !eventCells.find(slot => !!slot?.event);
             const showHeader = isFirst || isFirstForTheDay;
             const showSlot = !isLast && !isLastForTheDay && !isEmptyRow;
 
