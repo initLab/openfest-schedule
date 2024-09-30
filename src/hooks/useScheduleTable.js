@@ -34,7 +34,7 @@ export default function useScheduleTable({
             const nextDate = !isLast ? slotsArray[slotsIndex + 1] : null;
             const isFirstForTheDay = slotsIndex > 0 && !isSameDay(date, slotsArray[slotsIndex - 1]);
             const isLastForTheDay = slotsArray?.[slotsIndex + 1] && !isSameDay(date, slotsArray[slotsIndex + 1]);
-            const processedEvents = new Set();
+            const rowEvents = new Set();
 
             const eventCells = filteredHalls.flatMap((hall, hallIndex, hallsArray) => {
                 const currentTimeSlots = filteredSlots.filter(slot => compareAsc(slot.starts_at, date) === 0);
@@ -46,7 +46,7 @@ export default function useScheduleTable({
                     }];
                 }
 
-                if (processedEvents.has(currentHallSlot.event_id)) {
+                if (rowEvents.has(currentHallSlot.event_id)) {
                     return [];
                 }
 
@@ -67,7 +67,7 @@ export default function useScheduleTable({
                         break;
                     }
 
-                    processedEvents.add(currentHallSlot.event_id);
+                    rowEvents.add(currentHallSlot.event_id);
                     colSpan++;
                 }
 
