@@ -53,39 +53,41 @@ export default function Schedule({
         {isLoading && <progress value={loadingProgress}/>}
         {isComplete && <div className="schedule">
             <hr/>
-            <table>
-                {header.length > 0 && <thead>
-                    <tr>
-                        {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
-                    </tr>
-                </thead>}
-                <tbody>
-                    {rows.map(row => <tr key={row.id}>
-                        {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
-                            {cell.dateHeader && <DateHeader date={cell.dateHeader} lang={lang} />}
-                            {cell.timeSlot && <TimeSlot {...cell.timeSlot} />}
-                            {cell.event && <Event {...cell.event} />}
-                        </td>)}
-                    </tr>)}
-                </tbody>
-                {header.length > 0 && <tfoot>
-                    <tr>
-                        {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
-                    </tr>
-                </tfoot>}
-            </table>
-            <div className="separator" />
-            <table>
-                <tbody>
-                    {tracks.filter(track => !isTrackHidden(track)).map(track => <tr key={track.id}>
-                        <td className={track.css_class}>{track.name[lang]}</td>
-                    </tr>)}
-                    {Object.entries(langs).map(([langId, langName]) => <tr key={langId}>
-                        <td className={'schedule-'.concat(langId)}>{langName}</td>
-                    </tr>)}
-                </tbody>
-            </table>
-            <div className="separator" />
+            {rows.length > 0 && <>
+                <table>
+                    {header.length > 0 && <thead>
+                        <tr>
+                            {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
+                        </tr>
+                    </thead>}
+                    <tbody>
+                        {rows.map(row => <tr key={row.id}>
+                            {row.cells.map(cell => <td key={cell.id} {...cell.attributes}>
+                                {cell.dateHeader && <DateHeader date={cell.dateHeader} lang={lang} />}
+                                {cell.timeSlot && <TimeSlot {...cell.timeSlot} />}
+                                {cell.event && <Event {...cell.event} />}
+                            </td>)}
+                        </tr>)}
+                    </tbody>
+                    {header.length > 0 && <tfoot>
+                        <tr>
+                            {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
+                        </tr>
+                    </tfoot>}
+                </table>
+                <div className="separator" />
+                <table>
+                    <tbody>
+                        {tracks.filter(track => !isTrackHidden(track)).map(track => <tr key={track.id}>
+                            <td className={track.css_class}>{track.name[lang]}</td>
+                        </tr>)}
+                        {Object.entries(langs).map(([langId, langName]) => <tr key={langId}>
+                            <td className={'schedule-'.concat(langId)}>{langName}</td>
+                        </tr>)}
+                    </tbody>
+                </table>
+                <div className="separator" />
+            </>}
             {events.map(event => <section key={event.id} id={'event-'.concat(event.id)}>
                 <p>
                     <strong>{event.title}</strong>
