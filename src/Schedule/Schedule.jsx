@@ -74,7 +74,7 @@ export default function Schedule({
                     </tr>
                 </tfoot>}
             </table>
-            <div className="separator"/>
+            <div className="separator" />
             <table>
                 <tbody>
                     {tracks.filter(track => !isTrackHidden(track)).map(track => <tr key={track.id}>
@@ -120,7 +120,7 @@ export default function Schedule({
                                 <i className="fa-brands fa-twitter" />
                             </a>}
                             {speaker.github && <a href={'https://github.com/'.concat(speaker.github)}>
-                                <i className="fa-brands fa-github"/>
+                                <i className="fa-brands fa-github" />
                             </a>}
                         </div>
                         <p>{speaker.biography}</p>
