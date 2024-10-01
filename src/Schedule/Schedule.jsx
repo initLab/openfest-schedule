@@ -16,11 +16,11 @@ export default function Schedule({
     lang,
 }) {
     const {
-        speakers,
-        tracks,
+        speakers: allSpeakers,
+        tracks: allTracks,
         eventTypes,
         halls,
-        events,
+        events: allEvents,
         slots,
         isLoading,
         loadingProgress,
@@ -32,10 +32,15 @@ export default function Schedule({
     const {
         header,
         rows,
+        speakers,
+        tracks,
+        events,
     } = useScheduleTable({
         eventTypeId,
+        speakers: allSpeakers,
+        tracks: allTracks,
         halls,
-        events,
+        events: allEvents,
         slots,
     });
 

@@ -5,27 +5,33 @@ import { compareAsc, getTime, isSameDay, toDate } from 'date-fns';
 
 export default function useScheduleTable({
     eventTypeId,
-    halls = {},
-    events = {},
-    slots = {},
+    speakers: allSpeakers = [],
+    tracks: allTracks = [],
+    halls: allHalls = [],
+    events: allEvents = [],
+    slots: allSlots = [],
 }) {
     return useMemo(() => {
-        const filteredEvents = events.filter(event => eventTypeId > 0 ? event.event_type_id === eventTypeId : true);
-        const filteredEventIds = filteredEvents.map(event => event.id);
-        const filteredSlots = slots.sort(sorter('starts_at')).filter(slot => filteredEventIds.includes(slot.event_id));
-        const microslots = Array.from(new Set(filteredSlots.flatMap(slot => [
+        const events = allEvents.filter(event => eventTypeId > 0 ? event.event_type_id === eventTypeId : true);
+        const eventIds = events.map(event => event.id);
+        const speakerIds = events.flatMap(event => event.participant_user_ids);
+        const speakers = allSpeakers.filter(speaker => speakerIds.includes(speaker.id));
+        const trackIds = Array.from(new Set(events.map(event => event.track_id)));
+        const tracks = allTracks.filter(track => trackIds.includes(track.id));
+        const slots = allSlots.sort(sorter('starts_at')).filter(slot => eventIds.includes(slot.event_id));
+        const microslots = Array.from(new Set(slots.flatMap(slot => [
             getTime(slot.starts_at),
             getTime(slot.ends_at),
         ]))).sort().map(ts => toDate(ts));
-        const filteredHallIds = new Set(filteredSlots.map(slot => slot.hall_id));
-        const filteredHalls = halls.filter(hall => filteredHallIds.has(hall.id));
+        const hallIds = new Set(slots.map(slot => slot.hall_id));
+        const halls = allHalls.filter(hall => hallIds.has(hall.id));
         const skipHallSlots = new Map();
 
         const header = [{
                 id: 0,
                 name: Object.fromEntries(Object.keys(langs).map(lang => [lang, ''])),
             },
-            ...filteredHalls,
+            ...halls,
         ];
 
         const rows = microslots.flatMap((date, slotsIndex, slotsArray) => {
@@ -36,7 +42,7 @@ export default function useScheduleTable({
             const isLastForTheDay = slotsArray?.[slotsIndex + 1] && !isSameDay(date, slotsArray[slotsIndex + 1]);
             const rowEvents = new Set();
 
-            const eventCells = filteredHalls.flatMap((hall, hallIndex, hallsArray) => {
+            const eventCells = halls.flatMap((hall, hallIndex, hallsArray) => {
                 if (skipHallSlots.has(hall.id)) {
                     const leftToSkip = skipHallSlots.get(hall.id);
 
@@ -50,7 +56,7 @@ export default function useScheduleTable({
                     return [];
                 }
 
-                const currentTimeSlots = filteredSlots.filter(slot => compareAsc(slot.starts_at, date) === 0);
+                const currentTimeSlots = slots.filter(slot => compareAsc(slot.starts_at, date) === 0);
                 const currentHallSlot = currentTimeSlots.find(slot => slot.hall_id === hall.id);
 
                 if (!currentHallSlot) {
@@ -144,6 +150,9 @@ export default function useScheduleTable({
         return {
             header,
             rows,
+            tracks,
+            events,
+            speakers,
         };
-    }, [eventTypeId, events, halls, slots]);
+    }, [eventTypeId, allSpeakers, allTracks, allEvents, allHalls, allSlots]);
 }
