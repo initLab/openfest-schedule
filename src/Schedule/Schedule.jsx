@@ -89,7 +89,7 @@ export default function Schedule({
             {events.map(event => <section key={event.id} id={'event-'.concat(event.id)}>
                 <p>
                     <strong>{event.title}</strong>
-                    {event.participant_users && !isTrackHidden(event.track) && <>
+                    {event.participant_users.length > 0 && !isTrackHidden(event.track) && <>
                         ({event.participant_users.map(speaker => speaker && <Speaker key={speaker.id} {...speaker} />)})
                     </>}
                 </p>
