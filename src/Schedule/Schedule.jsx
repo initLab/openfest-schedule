@@ -72,6 +72,7 @@ export default function Schedule({
                     </tbody>
                     {halls.length > 0 && <tfoot>
                         <tr>
+                            <th />
                             {halls.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
                         </tr>
                     </tfoot>}
