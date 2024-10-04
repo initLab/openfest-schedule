@@ -19,7 +19,7 @@ export default function Schedule({
         speakers: allSpeakers,
         tracks: allTracks,
         eventTypes,
-        halls,
+        halls: allHalls,
         events: allEvents,
         slots,
         isLoading,
@@ -30,16 +30,16 @@ export default function Schedule({
     const [eventTypeId, setEventTypeId] = useState(0);
 
     const {
-        header,
         rows,
         speakers,
         tracks,
+        halls,
         events,
     } = useScheduleTable({
         eventTypeId,
         speakers: allSpeakers,
         tracks: allTracks,
-        halls,
+        halls: allHalls,
         events: allEvents,
         slots,
     });
@@ -55,10 +55,10 @@ export default function Schedule({
             <hr/>
             {rows.length > 0 && <>
                 <table>
-                    {header.length > 0 && <thead>
+                    {halls.length > 0 && <thead>
                         <tr>
                             <th />
-                            {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
+                            {halls.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
                         </tr>
                     </thead>}
                     <tbody>
@@ -70,9 +70,9 @@ export default function Schedule({
                             </td>)}
                         </tr>)}
                     </tbody>
-                    {header.length > 0 && <tfoot>
+                    {halls.length > 0 && <tfoot>
                         <tr>
-                            {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
+                            {halls.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
                         </tr>
                     </tfoot>}
                 </table>

@@ -140,9 +140,9 @@ export default function useScheduleTable({
         });
 
         return {
-            header: halls,
             rows,
             tracks,
+            halls,
             events,
             speakers,
         };
