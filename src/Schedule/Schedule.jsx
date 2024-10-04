@@ -57,6 +57,7 @@ export default function Schedule({
                 <table>
                     {header.length > 0 && <thead>
                         <tr>
+                            <th />
                             {header.map(hall => <th key={hall.id}>{hall.name[lang]}</th>)}
                         </tr>
                     </thead>}

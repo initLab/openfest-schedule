@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { sorter } from '../utils.js';
-import { langs } from '../Schedule/constants.js';
 import { compareAsc, getTime, isSameDay, toDate } from 'date-fns';
 
 export default function useScheduleTable({
@@ -26,13 +25,6 @@ export default function useScheduleTable({
         const hallIds = new Set(slots.map(slot => slot.hall_id));
         const halls = allHalls.filter(hall => hallIds.has(hall.id));
         const skipHallSlots = new Map();
-
-        const header = [{
-                id: 0,
-                name: Object.fromEntries(Object.keys(langs).map(lang => [lang, ''])),
-            },
-            ...halls,
-        ];
 
         const rows = microslots.flatMap((date, slotsIndex, slotsArray) => {
             const isFirst = slotsIndex === 0;
@@ -126,7 +118,7 @@ export default function useScheduleTable({
                     cells: [{
                         id: 'header',
                         attributes: {
-                            colSpan: header.length,
+                            colSpan: halls.length + 1,
                         },
                         dateHeader: date,
                     }],
@@ -148,7 +140,7 @@ export default function useScheduleTable({
         });
 
         return {
-            header,
+            header: halls,
             rows,
             tracks,
             events,
